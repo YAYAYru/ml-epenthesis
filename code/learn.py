@@ -300,7 +300,6 @@ def fit_temp(model, X_train, X_val, Y_train, Y_val, path_model):
                     validation_data = (X_val, Y_val),
                     #callbacks=callbacks_list
                     #callbacks=tensorboard_callback
-                    #callbacks=[WandbCallback()]
                     )
     res = model.predict(X_val)
     model.save(path_model)
@@ -316,25 +315,6 @@ def fit_temp(model, X_train, X_val, Y_train, Y_val, path_model):
     plt.legend()
     plt.savefig(config.PATH_IMAGE_HISTORY)
     plt.cla()
-
-
-import wandb
-def fit_ex_wandb(model, X_train, X_val, X_test, Y_train, Y_val, Y_test, path_model):
-
-    wandb.init(project="slsru_ml_tag", entity="signlanguages")
-
-    #callbacks_list = [checkpoint, learning_rate_reduction]
-    history = model.fit(X_train,
-                    Y_train,
-                    epochs=config.EPOCHS,
-                    batch_size=config.BATCH_SIZE,
-                    validation_data = (X_val, Y_val),
-                    #callbacks=callbacks_list
-                    #callbacks=tensorboard_callback
-                    #callbacks=[WandbCallback()]
-                    )
-    res = model.predict(X_val)
-    model.save(path_model)
 
 
 import tensorflow as tf
