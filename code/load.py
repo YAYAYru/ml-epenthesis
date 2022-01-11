@@ -330,8 +330,13 @@ def multiclass2binaryclass(y_full):
     uniclass = np.unique(y_full)
     y_full = np.where((y_full==2) | (y_full==4) , 1, 0)
     return y_full
+#TODO
+def CleanLabeledSigns(path_folder):
+    pass
 
 if __name__ == '__main__':
+
+
     """
     #path_json = config.PATH_JSON_WLM + "319361_7_c3.mp4.json"
     path_json = config.PATH_JSON_WLM + "1000095_5_3.mp4.json"
