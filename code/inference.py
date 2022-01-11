@@ -66,7 +66,7 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    #plt.show()
+    plt.show()
     #plt.savefig(config.PATH_IMAGE_CONFUSION_MATRIX)
 
     #plt.cla()
