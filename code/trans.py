@@ -15,6 +15,7 @@ import visual
 def windowing_xy(x_full, y_full, step):
     step_x = []
     step_y = []
+
     for i in range(x_full.shape[0]-step):
         step_x.append(x_full[i:(i+step)])
         y_mean = np.median(y_full[i:(i+step)])
@@ -28,8 +29,10 @@ def windowing_xy(x_full, y_full, step):
     step_y = np.array(step_y)
     print("step_x.shape", step_x.shape)
     print("step_y.shape", step_y.shape)
+
     print("np.unique(step_y", np.unique(step_y))
     print("Counter(y_full)",Counter(y_full))
+
     return step_x, step_y
 """
 
@@ -489,7 +492,53 @@ def interpolation_X(df_data, df_conf, np_label, fps, to_fps):
 
     return df_p_data, np_label_out
 
+def inbalance2balance_postwindow(x, y):
+    print("x", np.array(x).shape)
+    print("y", np.array(y).shape)
+    print("Counter(y)",Counter(y))
+    counter = Counter(y)
+    min_key = min(counter, key=counter.get)
+    print("min_key", min_key)
+    print("min_value", counter[min_key])
+
+    X = []
+    Y = []
+    j = 0
+    labelnp= np.unique(y)
+    print("labelnp", labelnp)
+
+    for n in labelnp:
+        for i,n1 in enumerate(y):
+            if n == n1 and counter[min_key]>j:
+                X.append(x[i])
+                Y.append(y[i])
+                j = j + 1
+        j = 0
+
+    counter_Y = Counter(Y)
+    print("counter_Y", counter_Y)
+    X = np.array(X)
+    Y = np.array(Y)
+
+    return X, Y
+
 if __name__ == '__main__':
+
+    x_full, y_full = load.from_json_csv_by_folders(config.PATH_CSV_SKELET, config.PATH_JSON_WLM, mode=config.MODE)
+    x_full_angle = tranform_angles(x_full)
+    print("x_full_angle", x_full_angle)
+    print("y_full", y_full)
+    y_full = load.multiclass2binaryclass(y_full)
+    x_steps, y_steps = windowing_xy(x_full, y_full, config.WINDOW_SIZE, y_last_or_center="center")
+    #print("x_steps", x_steps)
+    #print("y_steps", y_steps)
+
+    X,Y = inbalance2balance_postwindow(x_steps, y_steps)
+    #print("X", X)
+    #print("Y", Y)
+    print("X.shape", X.shape)
+    print("Y.shape", Y.shape)
+
     #s = 100
     #e = 105
     #x_full, y_full = load.from_json_csv_by_folders(config.PATH_CSV_SKELET, config.PATH_JSON_WLM, mode=config.MODE)
@@ -514,6 +563,8 @@ if __name__ == '__main__':
     print("x_steps.shape", x_steps.shape)
     print("y_steps.shape", y_steps.shape)
     """
+
+    """
     csvlist = glob.glob(config.PATH_CSV_SKELET_X_X_CX + '*.csv')
     videolist = glob.glob(config.PATH_CSV_SKELET_X_X_CX + "*" +".csv")
     df_data, fps, df_conf = load.from_csv_slsru_skelet_v0_1_0_df(videolist[0], config.SELECT_FEATURES,fps=True,conf=True)
@@ -527,6 +578,7 @@ if __name__ == '__main__':
         np_data = df_data.to_numpy()
         np_conf = df_conf.to_numpy()    
         np_p_data = pose_format_interpolation_XY(np_data, np_conf, fps, to_fps)  
+    """
 
     """
     csvlist = glob.glob(config.PATH_CSV_SKELET_X_X_CX + '*.csv')
@@ -597,10 +649,12 @@ if __name__ == '__main__':
     e = 165
     x_full, y_full = load.from_json_csv_by_folders(config.PATH_CSV_SKELET, config.PATH_JSON_WLM, mode=config.MODE)
     x_full = tranform_angles(x_full)    
+
     print("---------------windowing_xy()----------------")
     x_steps, y_steps = windowing_xy(x_full, y_full, config.WINDOW_SIZE, x_to_y="ManyToOne") 
     print("x_steps[:n] ManyToOne", x_steps[s:e])
     print("x_steps[:n] ManyToOne", y_steps[s:e])
+
     x_steps, y_steps = windowing_xy(x_full, y_full, config.WINDOW_SIZE, x_to_y="ManyToMany") 
     print("x_steps[:n] ManyToMany", x_steps[s:e])
     print("x_steps[:n] ManyToMany", y_steps[s:e])
@@ -630,6 +684,7 @@ if __name__ == '__main__':
     print("X", X.shape)
     print("X", X)
     """
+
 
     # stat_fps(csvlist)    
     pass
