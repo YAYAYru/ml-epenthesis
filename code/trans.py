@@ -9,7 +9,6 @@ import json
 
 import config
 import load
-import visual
 
 """
 def windowing_xy(x_full, y_full, step):
