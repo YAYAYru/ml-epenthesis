@@ -315,39 +315,3 @@ def fit_temp(model, X_train, X_val, Y_train, Y_val, path_model):
     plt.legend()
     plt.savefig(config.PATH_IMAGE_HISTORY)
     plt.cla()
-
-
-import tensorflow as tf
-import neptune.new as neptune
-from neptune.new.integrations.tensorflow_keras import NeptuneCallback
-
-
-def fit_ex_neptune(model, X_train, X_val, X_test, Y_train, Y_val, Y_test, path_model):
-    run = neptune.init(project='signlanguages/slsru-ml-tag')
-    #Project key: SLSMLTAG
-    #https://docs.neptune.ai/getting-started/how-to-add-neptune-to-your-code#step-1-connect-neptune-to-your-script
-
-
-
-    neptune_cbk = NeptuneCallback(run=run, base_namespace="fit")
-
-    history = model.fit(X_train,
-                    Y_train,
-                    epochs=config.EPOCHS,
-                    batch_size=config.BATCH_SIZE,
-                    validation_data = (X_val, Y_val),
-                    callbacks=[neptune_cbk],
-                    )
-    
-    tf.saved_model.save(model, path_model)
-    Y_test = to_categorical(Y_test)
-
-    eval_metrics = model.evaluate(X_test, Y_test, verbose=0)
-    for j, metric in enumerate(eval_metrics):
-        run["eval_test/{}".format(model.metrics_names[j])] = metric
-
-    
-    #run['confusion-matrix'] = 
-    
-
-    run.stop()
