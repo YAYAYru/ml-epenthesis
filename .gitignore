@@ -1,0 +1,3 @@
+*.pyc
+model
+code/.neptune/
