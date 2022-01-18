@@ -14,3 +14,5 @@ The following steps are required to run code pipeline_learn.py:
 - `python pipeline_learn.py`
 - See project ml-epenthesis in group signlanguages on site Neptune.ai
 
+When you do not need to export to the site, then replace `OFFLINE_ASYNC="async"` with `OFFLINE_ASYNC="offline"` in code/config.py 
+
