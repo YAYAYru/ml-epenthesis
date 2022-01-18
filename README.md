@@ -1,6 +1,6 @@
 # ml-epenthesis
 
-## pipeline_learn.py
+## code/pipeline_learn.py
 The following steps are required to run code pipeline_learn.py:
 - `git clone https://github.com/YAYAYru/ml_epenthesi`
 - `cd ml_epenthesis/code`
